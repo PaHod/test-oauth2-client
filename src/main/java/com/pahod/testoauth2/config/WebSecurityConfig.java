@@ -1,62 +1,41 @@
 package com.pahod.testoauth2.config;
 
+import org.keycloak.adapters.springsecurity.KeycloakConfiguration;
+import org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticationProvider;
+import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.User.UserBuilder;
+import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
+import org.springframework.security.core.session.SessionRegistryImpl;
+import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
+import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 
-@EnableWebSecurity
-//@EnableOAuth2Sso
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+@KeycloakConfiguration
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+public class WebSecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
+
+    @Bean
+    @Override
+    protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
+        return new RegisterSessionAuthenticationStrategy(new SessionRegistryImpl());
+    }
+
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) {
+        KeycloakAuthenticationProvider keycloakAuthenticationProvider = keycloakAuthenticationProvider();
+        keycloakAuthenticationProvider.setGrantedAuthoritiesMapper(new SimpleAuthorityMapper());
+        auth.authenticationProvider(keycloakAuthenticationProvider);
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        super.configure(http);
         http
                 .authorizeRequests()
                 .mvcMatchers("/").permitAll()
-//                .mvcMatchers("/").hasAnyRole("USER", "HR", "MANAGER")
-                .mvcMatchers("/hr_info").hasRole("HR")
-                .mvcMatchers("/manager_info").hasRole("MANAGER")
-//                .anyRequest().authenticated()
-                .and()
-                .formLogin().permitAll()
-//                .and()
-//                .csrf().disable()
-        ;
+                .anyRequest().fullyAuthenticated();
     }
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        UserBuilder builder = User.withDefaultPasswordEncoder();
-
-        auth.inMemoryAuthentication()
-                .withUser(builder.username("qwe").password("qwe").roles("USER"))
-                .withUser(builder.username("asd").password("asd").roles("HR"))
-                .withUser(builder.username("zxc").password("zxc").roles("HR", "MANAGER"));
-    }
-
-//    @Bean
-//    public PrincipalExtractor principalExtractor(UserRepository userRepository) {
-//        return map -> {
-//            String id = (String) map.get("sub");
-//
-//            UserModel user = userRepository.findById(id).orElseGet(() -> {
-//                UserModel newUser = new UserModel();
-//
-//                newUser.setId(id);
-//                newUser.setName((String) map.get("name"));
-//                newUser.setEmail((String) map.get("email"));
-//                newUser.setGender((String) map.get("gender"));
-//                newUser.setLocale((String) map.get("locale"));
-//                newUser.setUserpic((String) map.get("picture"));
-//
-//                return newUser;
-//            });
-//
-//            user.setLastVisit(LocalDateTime.now());
-//
-//            return userRepository.save(user);
-//        };
-//    }
 }

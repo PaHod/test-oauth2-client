@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
 
 </head>
@@ -8,29 +8,26 @@
 This page available for ALL.
 
 
-<div sec:authorize="!isAuthenticated()">
-    Login to see content.
-    <input type="button" value="Login" onclick="window.location.href = 'login'">
-</div>
+<!--<div sec:authorize="!isAuthenticated()">-->
+<!--    Login to see content.-->
+<!--    <input type="button" value="Login" onclick="window.location.href = 'login'">-->
+<!--</div>-->
 <div sec:authorize="isAuthenticated()">
+    <br><br>
     This content is only shown to authenticated users.
-
     <input type="button" value="Logout" onclick="window.location.href = 'logout'">
 </div>
 
 
-<div sec:authorize="hasRole('HR')">
+<!--<div sec:authorize="hasRole('MODERATOR')">-->
     <br><br>
-    This content is only shown to HRs.
-    <input type="button" value="HR's menu" onclick="window.location.href = 'hr_info'">
-</div>
-<div sec:authorize="hasRole('MANAGER')">
+    This content is only shown to MODERATORs.
+    <input type="button" value="MODERATOR's menu" onclick="window.location.href = 'moderator_page'">
+<!--</div>-->
+<!--<div sec:authorize="hasRole('ADMIN')">-->
     <br><br>
-    This content is only shown to MANAGERs.
-    <input type="button" value="Managers menu" onclick="window.location.href = 'manager_info'">
-</div>
-
-
-
+    This content is only shown to Admins.
+    <input type="button" value="Admin menu" onclick="window.location.href = 'admin_page'">
+<!--</div>-->
 </body>
 </html>

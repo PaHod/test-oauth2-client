@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+</head>
+<body>
+<h2>Home </h2>
+This page available for ALL.
+
+
+<div sec:authorize="!isAuthenticated()">
+    Login to see content.
+    <input type="button" value="Login" onclick="window.location.href = 'login'">
+</div>
+<div sec:authorize="isAuthenticated()">
+    This content is only shown to authenticated users.
+
+    <input type="button" value="Logout" onclick="window.location.href = 'logout'">
+</div>
+
+
+<div sec:authorize="hasRole('HR')">
+    <br><br>
+    This content is only shown to HRs.
+    <input type="button" value="HR's menu" onclick="window.location.href = 'hr_info'">
+</div>
+<div sec:authorize="hasRole('MANAGER')">
+    <br><br>
+    This content is only shown to MANAGERs.
+    <input type="button" value="Managers menu" onclick="window.location.href = 'manager_info'">
+</div>
+
+
+
+</body>
+</html>

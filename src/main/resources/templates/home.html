@@ -10,12 +10,12 @@ This page available for ALL.
 
 <div sec:authorize="!isAuthenticated()">
     Login to see content.
-    <input type="button" value="Login" onclick="window.location.href = 'auth/login'">
+    <input type="button" value="Login" onclick="window.location.href = 'login'">
 </div>
 <div sec:authorize="isAuthenticated()">
     <br><br>
     This content is only shown to authenticated users.
-    <input type="button" value="Logout" onclick="window.location.href = 'auth/logout'">
+    <input type="button" value="Logout" onclick="window.location.href = 'logout'">
 </div>
 
 

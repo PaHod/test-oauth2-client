@@ -1,13 +1,13 @@
-package com.pahod.testoauth2;
+package com.pahod.testoauth2client;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class TestOauth2Application {
+public class TestOauth2ClientApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TestOauth2Application.class, args);
+		SpringApplication.run(TestOauth2ClientApplication.class, args);
 	}
 
 }
